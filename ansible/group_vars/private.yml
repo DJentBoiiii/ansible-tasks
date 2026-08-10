@@ -1,0 +1,1 @@
+ansible_ssh_common_args: "{{ ansible_ssh_base_args }} -o ProxyJump={{ ansible_user }}@{{ hostvars[groups['bastion'][0]]['ansible_host'] | default(groups['bastion'][0]) }}"
