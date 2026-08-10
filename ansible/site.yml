@@ -1,0 +1,14 @@
+---
+- name: Configure servers for monitoring
+  hosts: private
+  become: true
+  roles:
+  - node_exporter
+- name: Configure the monitoring server
+  hosts: bastion
+  become: true
+  vars_files:
+    - secrets.yml
+  roles:
+  - prometheus
+  - grafana

@@ -1,0 +1,20 @@
+---
+- name: Deliver healthcheck to all servers
+  hosts: all
+  become: true
+  tasks:
+    - name: Copy the script to /usr/local/bin
+      ansible.builtin.copy:
+        src: ../scripts/healthcheck.sh
+        dest: /usr/local/bin/healthcheck.sh
+        mode: '0755'
+      # perms: rwxr-xr-x (executable)
+    - name: Run healthcheck and show the result
+      ansible.builtin.command: /usr/local/bin/healthcheck.sh
+      register: hc_result
+      # save the output into a variable
+      changed_when: false
+    # this command doesn't "change" anything
+    - name: Print the result
+      ansible.builtin.debug:
+        var: hc_result.stdout_lines

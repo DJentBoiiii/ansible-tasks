@@ -1,0 +1,28 @@
+---
+- name: Add the Grafana repo key
+  ansible.builtin.apt_key:
+    url: https://apt.grafana.com/gpg.key
+    state: present
+
+- name: Add the Grafana repository
+  ansible.builtin.apt_repository:
+    repo: "deb https://apt.grafana.com stable main"
+    state: present
+
+- name: Install Grafana
+  ansible.builtin.apt:
+    name: grafana
+    state: present
+    update_cache: true
+
+- name: Set the Grafana admin password
+  ansible.builtin.command:
+    cmd: >
+      grafana cli --homepath /usr/share/grafana admin reset-admin-password {{ vault_grafana_admin_password | quote }}
+  no_log: true
+
+- name: Start Grafana
+  ansible.builtin.systemd:
+    name: grafana-server
+    enabled: true
+    state: started
