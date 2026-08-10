@@ -1,1 +1,2 @@
-ansible_ssh_common_args: "{{ ansible_ssh_base_args }} -o ProxyJump={{ ansible_user }}@{{ hostvars[groups['public'][0]]['ansible_host'] | default(groups['public'][0]) }}"
+---
+ansible_ssh_common_args: "{{ ansible_ssh_base_args }} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyJump={{ ansible_user }}@{{ hostvars[groups['public'][0]]['ansible_host'] | default(groups['public'][0]) }}"
