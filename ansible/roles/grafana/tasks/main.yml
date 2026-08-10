@@ -15,14 +15,21 @@
     state: present
     update_cache: true
 
-- name: Set the Grafana admin password
-  ansible.builtin.command:
-    cmd: >
-      grafana cli --homepath /usr/share/grafana admin reset-admin-password {{ vault_grafana_admin_password | quote }}
-  no_log: true
-
 - name: Start Grafana
   ansible.builtin.systemd:
     name: grafana-server
     enabled: true
     state: started
+
+- name: Wait for Grafana to be ready
+  ansible.builtin.wait_for:
+    port: 3000
+    host: 127.0.0.1
+    delay: 3
+    timeout: 30
+
+- name: Set the Grafana admin password
+  ansible.builtin.command:
+    cmd: >
+      grafana cli --homepath /usr/share/grafana admin reset-admin-password {{ vault_grafana_admin_password | quote }}
+  no_log: true
