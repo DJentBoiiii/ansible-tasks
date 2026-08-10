@@ -9,5 +9,5 @@ hostnames:
   - ip-address
   - private-ip-address
 groups:
-  bastion: ec2_tags.Tier == 'public'
+  public: ec2_tags.Tier == 'public'
   private: ec2_tags.Tier == 'private'
