@@ -1,20 +1,17 @@
 ---
 - name: Install Prometheus
-  become: true
   ansible.builtin.apt:
     name: prometheus
     state: present
     update_cache: true
 
 - name: Put the Prometheus config in place
-  become: true
   ansible.builtin.template:
     src: prometheus.yml.j2
     dest: /etc/prometheus/prometheus.yml
   notify: restart prometheus
 
 - name: Start Prometheus
-  become: true
   ansible.builtin.systemd:
     name: prometheus
     enabled: true
